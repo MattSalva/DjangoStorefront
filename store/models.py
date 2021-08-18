@@ -25,6 +25,8 @@ class Customer(models.Model):
     phone = models.CharField(max_length=255)
     birth_date = models.DateField(null=True)
     memebership = models.CharField(max_length=1, choices=MEMBERSHIP_CHOICES, default=MEMBERSHIP_BRONZE)
+    class Meta:
+        db_table = 'store_custom'
 
 class Order(models.Model):
     PENDING = 'P'
@@ -45,8 +47,9 @@ class Cart(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=255) #varchar(255)
+    slug = models.SlugField(null=True)
     description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection, on_delete=models.PROTECT) # PROTECT = evitamos que se borren todos los productos de una collection borrada
@@ -57,6 +60,7 @@ class Address(models.Model):
     city = models.CharField(max_length=255)
     #customer = models.OneToOneField(Customer, on_delete=models.CASCADE, primary_key=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    zip = models.SmallIntegerField(null=True)
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.PROTECT)
